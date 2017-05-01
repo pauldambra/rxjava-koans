@@ -34,9 +34,9 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
                 .map(word -> word.replace("e", "3"))
                 .map(word -> word.replace("l", "1"))
                 .subscribe(mSubscriber);
-        assertThat(mSubscriber.getOnNextEvents()).contains(_____);
-        assertThat(mSubscriber.getOnNextEvents()).contains(_____);
-        assertThat(mSubscriber.getOnNextEvents()).contains(_____);
+        assertThat(mSubscriber.getOnNextEvents()).contains("k3w1");
+        assertThat(mSubscriber.getOnNextEvents()).contains("133t");
+        assertThat(mSubscriber.getOnNextEvents()).contains("sp3ak");
     }
 
     /**
@@ -76,16 +76,13 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
         /**
          *  what do you think calling .map() on the foodCartItemsObservable will do?
          */
-        Observable<Observable<CarnivalFood>> map = foodCartItemsObservable.map(new Func1<List<CarnivalFood>, Observable<CarnivalFood>>() {
-            @Override
-            public Observable<CarnivalFood> call(List<CarnivalFood> foods) {
-                Observable<CarnivalFood> from = Observable.from(foods);
-                return from;
-            }
+        Observable<Observable<CarnivalFood>> map = foodCartItemsObservable.map(foods -> {
+            Observable<CarnivalFood> from = Observable.from(foods);
+            return from;
         });
         map.subscribe(mSubscriber);
 
-        assertThat(mSubscriber.getOnNextEvents()).hasSize(____);
+        assertThat(mSubscriber.getOnNextEvents()).hasSize(2);
 
         /** Was the result above what you expected? A bit strange huh? You'd think that you'd get
          * a value matching the number of items of foods in each list at first glance.
@@ -106,14 +103,9 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
          * Map a function over a collection and flatten the result by one-level. In this case, we will map a function over the list of List<Food>s
          * and then flatten them into one list.
          */
-        Observable<CarnivalFood> individualItemsObservable = foodCartItemsObservable.flatMap(new Func1<List<CarnivalFood>, Observable<CarnivalFood>>() {
-            @Override
-            public Observable<CarnivalFood> call(List<CarnivalFood> foods) {
-                return Observable.from(foods);
-            }
-        });
+        Observable<CarnivalFood> individualItemsObservable = foodCartItemsObservable.flatMap(foods -> Observable.from(foods));
         individualItemsObservable.subscribe(mSubscriber);
-        assertThat(mSubscriber.getOnNextEvents()).hasSize(____);
+        assertThat(mSubscriber.getOnNextEvents()).hasSize(11);
 
         mSubscriber = new TestSubscriber<>();
 
@@ -124,14 +116,9 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
          * public final Observable<T> filter(Func1<? super T,java.lang.Boolean> predicate)
          * if the predicate returns true, the data/event being evaluated in the predicate is passed on
          */
-        individualItemsObservable.filter(new Func1<CarnivalFood, Boolean>() {
-            @Override
-            public Boolean call(CarnivalFood food) {
-                return food.mPrice < 5.00;
-            }
-        }).subscribe(mSubscriber);
+        individualItemsObservable.filter(food -> food.mPrice < 5.00).subscribe(mSubscriber);
 
-        assertThat(mSubscriber.getOnNextEvents()).hasSize(____);
+        assertThat(mSubscriber.getOnNextEvents()).hasSize(7);
 
         System.out.println("With my 5 bucks I can buy: " + mSubscriber.getOnNextEvents());
     }
@@ -157,7 +144,7 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
         elevatorPassengersObservable.reduce(0, (accumulatedWeight, elevatorPassenger) ->
                 elevatorPassenger.mWeightInPounds + accumulatedWeight)
                 .subscribe(testSubscriber);
-        assertThat(testSubscriber.getOnNextEvents().get(0)).isEqualTo(____);
+        assertThat(testSubscriber.getOnNextEvents().get(0)).isEqualTo(850);
     }
 
     /**
@@ -170,7 +157,7 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
 
         Observable<String> repeatingObservable = Observable.just(weapon).repeat(4);
         repeatingObservable.subscribe(subscriber);
-        assertThat(subscriber.getOnNextEvents()).hasSize(____);
+        assertThat(subscriber.getOnNextEvents()).hasSize(4);
 
         subscriber = new TestSubscriber<>();
         /**
@@ -178,7 +165,7 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
          */
         Observable<String> challengeRepeatingObservable = repeatingObservable.repeat(4);
         challengeRepeatingObservable.subscribe(subscriber);
-        assertThat(subscriber.getOnNextEvents()).hasSize(____);
+        assertThat(subscriber.getOnNextEvents()).hasSize(16);
     }
 
 
@@ -201,9 +188,9 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
                 })
                 .doOnNext(integer -> mStringC += integer)
                 .subscribe(integer -> mStringC += integer);
-        assertThat(mStringA).isEqualTo("____");
-        assertThat(mStringB).isEqualTo("____");
-        assertThat(mStringC).isEqualTo("____");
+        assertThat(mStringA).isEqualTo("123456");
+        assertThat(mStringB).isEqualTo("246");
+        assertThat(mStringC).isEqualTo("112233445566");
     }
 
     /**
@@ -215,7 +202,7 @@ public class lessonB_MapAndFlatMapAndBasicOperators {
     public void _6_convertingEvents() {
         mStringA = "";
         Observable.just("wE", "hOpe", "yOU", "aRe", "eNjOyInG", "thIS")
-                .map(s -> _____)
+                .map(s -> s.toLowerCase())
                 .subscribe(s -> mStringA += s + " ");
 
         assertThat(mStringA).isEqualTo("we hope you are enjoying this ");
