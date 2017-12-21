@@ -27,11 +27,15 @@ public class lessonA_CreatingObservableStreams {
     /**
      * Observables are ultimately about handling "streams" of items (i.e. more than one item) in a "data pipeline".
      * Each item is called an "event" of "data". Here we have the creation of a new stream of data/events,
-     * called an Observable. (http://reactivex.io/RxJava/javadoc/rx/Observable.html)
+     * called an Observable. (<a href="http://reactivex.io/RxJava/javadoc/rx/Observable.html">http://reactivex.io/RxJava/javadoc/rx/Observable.html</a>)
      * We also have a subscription, which finally takes the values from the pipeline and consumes them.
      * <p>
      * For our RxJava tests, we will be working with an object called TestSubscriber which the framework includes.
      * It gives us an easy way to check what was emitted on the pipeline.
+     * <p>
+     * ---'Foo'---'Bar'---|-&gt;
+     *
+     * @see <a href="http://reactivex.io/documentation/operators/just.html">Observable.just</a>
      */
     @Test
     public void _1_anObservableStreamOfEventsAndDataEmitsEachItemInOrder() {
@@ -60,6 +64,10 @@ public class lessonA_CreatingObservableStreams {
      * onCompleted():
      * An Observable calls this method after it has called onNext for the final time,
      * if it has not encountered any errors.
+     * <p>
+     * --1--2--3--4--5--|-&gt;
+     *
+     * @see <a href="http://reactivex.io/documentation/operators/just.html">Observable.just</a>
      */
     @Test
     public void _2_anObservableStreamEmitsThreeMajorEventTypes() {
@@ -77,8 +85,12 @@ public class lessonA_CreatingObservableStreams {
 
     /**
      * In the test above, we saw Observable.just(), which takes one or several Java objects
-     * and converts them into an Observable which emits those objects. (http://reactivex.io/RxJava/javadoc/rx/Observable.html#just(T))
+     * and converts them into an Observable which emits those objects. (<a href="http://reactivex.io/RxJava/javadoc/rx/Observable.html#just(T)">http://reactivex.io/RxJava/javadoc/rx/Observable.html#just(T)</a>)
      * Let's build our own this time.
+     * <p>
+     * --'Larry'--'Moe'--'Curly'--38--|-&gt;
+     *
+     * @see <a href="http://reactivex.io/documentation/operators/just.html">Observable.just</a>
      */
     @Test
     public void _3_justCreatesAnObservableEmittingItsArguments() {
@@ -107,6 +119,11 @@ public class lessonA_CreatingObservableStreams {
      * Observable.from() is another way to create an Observable. It's different than .just() - it is specifically designed to work
      * with Collections. When just is given a collection, it converts it into an Observable that emits each item from the list.
      * Let's understand how the two are different more clearly.
+     * <p>
+     * --'bread (one)'--'bread (two)'--'cheese'--'mayo'--'turkey'--'lettuce'--'pickles'--'jalapenos'--'Sriracha sauce'--|-&gt;
+     *
+     * @see <a href="http://reactivex.io/documentation/operators/from.html">Observable.from</a>
+     * @see <a href="http://reactivex.io/documentation/operators/just.html">Observable.just</a>
      */
     @Test
     public void _4_fromCreatesAnObservableThatEmitsEachElementFromAnIterable() {
@@ -147,6 +164,10 @@ public class lessonA_CreatingObservableStreams {
      * However, we can manually pass code right to onNext() ourselves with Observable.doOnNext()
      * <p>
      * Lets setup an Observable with all the functionality we need to sum a range of Integers. Then lets subscribe to it later on.
+     * <p>
+     * --1--2--3--4--5--6--7--8--9--10--|-&gt;
+     * </p>
+     * @see <a href="http://reactivex.io/documentation/operators/range.html">Observable.range</a>
      */
     @Test
     public void _5_nothingListensUntilYouSubscribe() {
@@ -156,7 +177,7 @@ public class lessonA_CreatingObservableStreams {
          * (http://reactivex.io/RxJava/javadoc/rx/Observable.html#range(int,%20int))
          *
          * We also haven't seen doOnNext() yet - its one way we can take action based on one of a series of Observable lifecycle events.
-         * http://reactivex.io/documentation/operators/do.html
+         * <a href="http://reactivex.io/documentation/operators/do.html">http://reactivex.io/documentation/operators/do.html</a>
          */
         Observable<Integer> numbers = Observable.range(1, 10).doOnNext(integer -> mSum += integer);
         //Hint: what would we need to do to get our Observable to start emitting things?
